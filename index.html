@@ -116,6 +116,36 @@
 <script type="text/javascript" src="icanhaz.min.js"></script>
 
 <script type="text/javascript">
+
+$(document).ready(function()
+	{
+		$('header').css('font-size', '250%')
+		$('header').css('color', 'purple')
+		
+	});
+
+	$('#search-button').click(function(){
+		var searchedTweet = $('#search').val();
+
+		$('#user-list').empty();
+		$('#tweet-list').empty();
+
+		if (searchedTweet !== '')
+		$.ajax({
+			url: 'http://search.twitter.com/search.json?q='+searchedTweet+'&rpp=20&include_entities=false&result_type=mixed',
+			dataType: 'jsonp',
+			type: 'GET',
+			jsonpCallback: 'handle_tweets'
+		});
+	});
+
+	function handle_tweets(data)
+	{for (var i = 0;i < data.results.length;i++)
+		{
+			$('#user-list').append('<a href="http://twitter.com/'+data.results[i].from_user+'"><img src="'+data.results[i].profile_image_url+'" /></a>');
+			$('#tweet-list').append('<a href="http://twitter.com/'+data.results[i].from_user+'"><img src="'+data.results[i].profile_image_url+'" /><li style="color:maroon;font-size:11px">'+data.results[i].text+data.results[i].profile_image_url+'</a></li><br /><br />');
+		}		
+	}
 	// YOUR JS GOES HERE
 	// here's the twitter URL template
 	// http://search.twitter.com/search.json?q=SEARCH_VALUE_HERE&rpp=20&include_entities=false&result_type=mixed
